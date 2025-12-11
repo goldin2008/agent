@@ -2,6 +2,11 @@
 
 AI-powered agent system leveraging AWS infrastructure, Model Context Protocol (MCP), and Claude AI for intelligent task execution with external API integration.
 
+> https://github.com/WaelDataReply/AmazonAgentCore_GW_demo
+
+> https://medium.com/@wael-saideni/building-production-ready-mcp-workflows-with-amazon-bedrock-agentcore-gateway-d8386db65df3
+
+
 ---
 
 ## 📋 Table of Contents
