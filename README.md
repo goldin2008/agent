@@ -4,7 +4,11 @@ AI-powered agent system leveraging AWS infrastructure, Model Context Protocol (M
 
 > https://github.com/WaelDataReply/AmazonAgentCore_GW_demo
 
+> https://github.com/aws-samples/sample-agentic-ai-demos/tree/main/modules/anthropic-bedrock-python-ecs-mcp
+
 > https://medium.com/@wael-saideni/building-production-ready-mcp-workflows-with-amazon-bedrock-agentcore-gateway-d8386db65df3
+
+> https://engineering.doit.com/building-aws-architecture-with-mcp-servers-and-strands-agents-e53bd163962f
 
 
 ---
