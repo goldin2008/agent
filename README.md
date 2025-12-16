@@ -14,6 +14,8 @@ AI-powered agent system leveraging AWS infrastructure, Model Context Protocol (M
 
 ![Agent Architecture](./image/image-11-1.png)
 
+> https://aws.amazon.com/blogs/machine-learning/move-your-ai-agents-from-proof-of-concept-to-production-with-amazon-bedrock-agentcore/
+
 
 Although large language models (LLMs) excel at understanding language and generating content, building real-world agentic applications requires complex workflow management, tool calling capabilities, and context management. Multi-agent architectures address these challenges by breaking down complex systems into specialized components, but they introduce new complexities in agent coordination, memory management, and workflow orchestration.
 
@@ -44,6 +46,8 @@ The transformation required minimal code changes at each step, showcasing how Am
 
 
 ![Agent Architecture](./image/ML-18630-image001.jpg)
+
+> https://aws.amazon.com/blogs/machine-learning/harness-the-power-of-mcp-servers-with-amazon-bedrock-agents/
 
 
 Today, MCP is providing agents standard access to an expanding list of accessible tools that you can use to accomplish a variety of tasks. In time, MCP can promote better discoverability of agents and tools through marketplaces, enabling agents to share context and have common workspaces for better interaction, and scale agent interoperability across the industry.
