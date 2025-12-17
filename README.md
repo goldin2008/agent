@@ -66,7 +66,104 @@ Drawing on our experience building mission-critical systems, Amazon Bedrock Agen
 AgentCore: Get agents to production fast
 AgentCore, now generally available, makes it possible for every developer to get agents from pilots to full-scale production fast. AgentCore gives you the complete foundation you need to build, deploy, and operate agents. You can easily equip agents with tools, memory, and data to handle complex workflows. You can deploy agents with a few lines of code on one of the most secure and scalable runtimes available today. And you can operate those agents with the controls and access management required for enterprise deployments. You can do all of this without any infrastructure management, and it’s easy to get started using any model or agent framework of your choice.
 
+Building agents can be hard – you need to figure out how to integrate with identity providers, how to build memory and observability, and integrate with tools. Our agentic platform offers fully-managed services across the agent development lifecycle from build to deploy to operate. You can mix and match, use any model or framework, offering maximum flexibility with access to enterprise-grade infrastructure and tools. Let’s look at its core capabilities.
 
+Build the way you want: The agent landscape is evolving rapidly, with new frameworks, models, and protocols emerging almost weekly. You can build the way you want with composable AgentCore services that can be used together or independently. Your organization can choose which AgentCore services the team needs while using their preferred frameworks (including CrewAI, Google ADK, LangGraph, LlamaIndex, OpenAI Agents SDK, and Strands Agents) and models (including those available on Amazon Bedrock or models available outside Bedrock including OpenAI and Gemini), so you stay free to build the way you want.
+
+Foundational tools for agent success: Agents create value with concrete actions – writing and executing code, connecting to company systems, and navigating the web. AgentCore provides these essential services: AgentCore Code Interpreter enables agents to generate and execute code securely in isolated environments, and AgentCore Browser allows agents to interact with web applications at scale. Meanwhile, AgentCore Gateway transforms your existing APIs and AWS Lambda functions into agent-compatible tools, connects to existing MCP servers, and provides seamless integration with essential third-party business tools and services (such as Jira, Asana, and Zendesk). This unified access point enables secure integration across your enterprise systems. With AgentCore Identity, agents can securely access and operate across these tools with proper authentication and authorization using OAuth standards.
+
+Context-aware agents with intelligent memory: For agents to be truly effective, they need to maintain context and learn from interactions over time. Consider a sales support agent helping a customer explore enterprise software options – it should remember the customer’s industry, budget constraints, and technical requirements across multiple conversations, eliminating repetitive questions and delivering increasingly personalized recommendations. Similarly, when assisting with complex technical troubleshooting, an agent should recall previous debugging attempts and their outcomes to provide more targeted solutions. AgentCore Memory helps developers create these sophisticated, context-aware experiences without managing complex memory infrastructure, helping agents build and maintain detailed understanding of user preferences, historical interactions, and relevant context that enriches every conversation.
+
+Comprehensive observability for trustworthy agents: Because agents reason in real-time and non-deterministically perform actions, you need complete visibility into the reasoning and actions of agents. Powered by Amazon CloudWatch, AgentCore Observability provides comprehensive monitoring through real-time dashboards and detailed audit trails. Organizations can track every agent action, debug issues quickly, and continuously optimize performance. Through OpenTelemetry (OTEL) compatibility, AgentCore Observability integrates with existing monitoring tools, such as CloudWatch, Dynatrace, Datadog, Arize Phoenix, LangSmith, and Langfuse.
+
+Industry-leading reliability at any scale: Unlike traditional applications, agent workload durations can be inherently unpredictable. AgentCore Runtime is designed for this variability, automatically scaling from zero to thousands of sessions as needed, and it offers an industry-leading runtime of eight hours for long running tasks.
+
+
+![Agent Architecture](./image/ML-19938-image.png)
+
+> https://aws.amazon.com/blogs/machine-learning/transform-your-mcp-architecture-unite-mcp-servers-through-agentcore-gateway/
+
+
+As AI agents are adopted at scale, developer teams can create dozens to hundreds of specialized Model Context Protocol (MCP) servers, tailored for specific agent use case and domain, organization functions or teams. Organizations also need to integrate their own existing MCP servers or open source MCP servers for their AI workflows. There is a need for a way to efficiently combine these existing MCP servers–whether custom-built, publicly available, or open source–into a unified interface that AI agents can readily consume and teams can seamlessly share across the organization.
+
+Earlier this year, we introduced Amazon Bedrock AgentCore Gateway, a fully managed service that serves as a centralized MCP tool server, providing a unified interface where agents can discover, access, and invoke tools. Today, we’re extending support for existing MCP servers as a new target type in AgentCore Gateway. With this capability, you can group multiple task-specific MCP servers aligned to agent goals behind a single, manageable MCP gateway interface. This reduces the operational complexity of maintaining separate gateways, while providing the same centralized tool and authentication management that existed for REST APIs and AWS Lambda functions.
+
+Without a centralized approach, customers face significant challenges: discovering and sharing tools across organizations becomes fragmented, managing authentication across multiple MCP servers grows increasingly complex, and maintaining separate gateway instances for each server quickly becomes unmanageable. Amazon Bedrock AgentCore Gateway helps solves these challenges by treating existing MCP servers as native targets, giving customers a single point of control for routing, authentication, and tool management—making it as simple to integrate MCP servers as it is to add other targets to the gateway.
+
+
+The following diagram illustrates how an ordering agent interacts with multiple MCP servers through AgentCore Gateway. The agent connects to the gateway and discovers the available tools. Each team maintains control over their domain-specific tools while contributing to a cohesive agent experience. The gateway handles tool naming collisions, authentication, and provides unified semantic search across the tools.
+
+The AgentCore Gateway serves as an integration hub in modern agentic architectures, offering a unified interface for connecting diverse agent implementations with a wide array of tool providers. The architecture, as illustrated in the diagram, demonstrates how the gateway bridges the gap between agent and tool implementation approaches, now enhanced with the ability to directly integrate MCP server targets.
+
+AgentCore Gateway integration architecture
+In AgentCore Gateway, a target defines the APIs, Lambda functions, or other MCP servers that a gateway will provide as tools to an agent. Targets can be Lambda functions, OpenAPI specifications, Smithy models, MCP servers, or other tool definitions.
+
+With this authentication foundation you get sophisticated tool management capabilities through a unified architecture. When an agent requests tool discovery, the gateway provides a consistent view across the integrated targets, with tools from MCP servers appearing alongside Lambda functions and traditional APIs. 
+
+![Agent Architecture](./image/ML-19938-image-2.png)
+
+The gateway combines MCP servers, traditional APIs, and serverless functions into a coherent tool environment. This capability, along with enterprise-grade security and performance, makes it a beneficial infrastructure for agentic computing.
+
+![Agent Architecture](./image/ML-19938-image-3.png)
+
+In this post, we’ll guide you through the steps to set up an MCP server target in AgentCore Gateway, which is as simple as adding a new MCP server type target to a new or existing MCP Gateway. Adding an MCP server to an AgentCore Gateway will allow you to centralize your tool management, security authentication, and operational best practices with managing MCP servers at scale.
+
+![Agent Architecture](./image/ML-19413-arch-diag.png)
+
+> https://aws.amazon.com/blogs/machine-learning/build-multi-agent-site-reliability-engineering-assistants-with-amazon-bedrock-agentcore/
+
+The architecture demonstrates how the SRE support agent integrates seamlessly with Amazon Bedrock AgentCore components:
+- Customer interface – Receives alerts about degraded API response times and returns comprehensive agent responses
+- Amazon Bedrock AgentCore Runtime – Manages the execution environment for the multi-agent SRE solution
+- SRE support agent – Multi-agent collaboration system that processes incidents and orchestrates responses
+- Amazon Bedrock AgentCore Gateway – Routes requests to specialized tools through OpenAPI interfaces:
+  - Kubernetes API for getting cluster events
+  - Logs API for analyzing log patterns
+  - Metrics API for analyzing performance trends
+  - Runbooks API for searching operational procedures
+- Amazon Bedrock AgentCore Memory – Stores and retrieves session context and previous interactions for continuity
+- Amazon Bedrock AgentCore Identity – Handles authentication for tool access using Amazon Cognito integration
+- Amazon Bedrock AgentCore Observability – Collects and visualizes agent traces for monitoring and debugging
+- Amazon Bedrock LLMs – Powers the agent intelligence through Anthropic’s Claude large language models (LLMs)
+
+The multi-agent solution uses a supervisor-agent pattern where a central orchestrator coordinates five specialized agents:
+- Supervisor agent – Analyzes incoming queries and creates investigation plans, routing work to appropriate specialists and aggregating results into comprehensive reports
+- Kubernetes infrastructure agent – Handles container orchestration and cluster operations, investigating pod failures, deployment issues, resource constraints, and cluster events
+- Application logs agent – Processes log data to find relevant information, identifies patterns and anomalies, and correlates events across multiple services
+- Performance metrics agent – Monitors system metrics and identifies performance issues, providing real-time analysis and historical trending
+- Operational runbooks agent – Provides access to documented procedures, troubleshooting guides, and escalation procedures based on the current situation
+
+The Amazon Bedrock AgentCore Gateway component converts the SRE agent’s backend APIs (Kubernetes, application logs, performance metrics, and operational runbooks) into Model Context Protocol (MCP) tools. This enables agents built with an open-source framework supporting MCP (such as LangGraph in this post) to seamlessly access infrastructure APIs.
+
+Security for the entire solution is provided by Amazon Bedrock AgentCore Identity. It supports ingress authentication for secure access control for agents connecting to the gateway, and egress authentication to manage authentication with backend servers, providing secure API access without hardcoding credentials.
+
+The serverless execution environment for deploying the SRE agent in production is provided by Amazon Bedrock AgentCore Runtime. It automatically scales from zero to handle concurrent incident investigations while maintaining complete session isolation. Amazon Bedrock AgentCore Runtime supports both OAuth and AWS Identity and Access Management (IAM) for agent authentication. Applications that invoke agents must have appropriate IAM permissions and trust policies.
+
+Amazon Bedrock AgentCore Memory transforms the SRE agent from a stateless system into an intelligent learning assistant that personalizes investigations based on user preferences and historical context. The memory component provides three distinct strategies:
+- User preferences strategy (/sre/users/{user_id}/preferences) – Stores individual user preferences for investigation style, communication channels, escalation procedures, and report formatting. For example, Alice (a technical SRE) receives detailed systematic analysis with troubleshooting steps, whereas Carol (an executive) receives business-focused summaries with impact analysis.
+- Infrastructure knowledge strategy (/sre/infrastructure/{user_id}/{session_id}) – Accumulates domain expertise across investigations, enabling agents to learn from past discoveries. When the Kubernetes agent identifies a memory leak pattern, this knowledge becomes available for future investigations, enabling faster root cause identification.
+- Investigation memory strategy (/sre/investigations/{user_id}/{session_id}) – Maintains historical context of past incidents and their resolutions. This enables the solution to suggest proven remediation approaches and avoid anti-patterns that previously failed.
+
+Adding observability to the SRE agent
+Adding observability to an SRE agent deployed on Amazon Bedrock AgentCore Runtime is straightforward using the Amazon Bedrock AgentCore Observability primitive. This enables comprehensive monitoring through Amazon CloudWatch with metrics, traces, and logs. 
+
+We start by setting up the repository and establishing the local runtime environment with API keys, LLM providers, and demo infrastructure. We then bring core AgentCore components online by creating the gateway for standardized API access, configuring authentication, and establishing tool connectivity. We add intelligence through AgentCore Memory, creating strategies for user preferences and investigation history while loading personas for personalized incident response. Finally, we configure individual agents with specialized tools, integrate memory capabilities, orchestrate collaborative workflows, and deploy to AgentCore Runtime with full observability.
+
+This investigation demonstrates how Amazon Bedrock AgentCore primitives work together:
+- Amazon Bedrock AgentCore Gateway – Provides secure access to infrastructure APIs through MCP tools
+- Amazon Bedrock AgentCore Identity – Handles ingress and egress authentication
+- Amazon Bedrock AgentCore Runtime – Hosts the multi-agent solution with automatic scaling
+- Amazon Bedrock AgentCore Memory – Personalizes Alice’s experience and stores investigation knowledge for future incidents
+- Amazon Bedrock AgentCore Observability – Captures detailed metrics and traces in CloudWatch for monitoring and debugging
+
+The SRE agent demonstrates intelligent agent orchestration, with the supervisor routing work to specialists based on the investigation plan. The solution’s memory capabilities make sure each investigation builds organizational knowledge and provides personalized experiences based on user roles and preferences.
+
+This investigation showcases several key capabilities:
+- Multi-source correlation – It connects database configuration issues to API performance degradation
+- Sequential investigation – Agents work systematically through the investigation plan while providing live updates
+- Source attribution – Findings include the specific tool and data source
+- Actionable insights – It provides a clear timeline of events and prioritized recovery steps
+- Cascading failure detection – It can help show how one failure propagates through the system
 
 
 ---
